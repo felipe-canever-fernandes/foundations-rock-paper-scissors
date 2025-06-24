@@ -1,4 +1,5 @@
-console.log(getComputerChoice());
+console.log("Computer choice:", getComputerChoice());
+console.log("Human choice:", getHumanChoice());
 
 function getComputerChoice() {
 	const choiceCount = 3;
@@ -19,4 +20,9 @@ function getComputerChoice() {
 			console.error(`invalid choice number ${choice}`);
 			return undefined;
 	}
+}
+
+function getHumanChoice() {
+	const choice = prompt("Enter rock, paper or scissors:");
+	return choice;
 }
