@@ -29,3 +29,29 @@ function getHumanChoice() {
 	const choice = prompt("Enter rock, paper or scissors:");
 	return choice;
 }
+
+function playRound(computerChoice, humanChoice) {
+	humanChoice = humanChoice.toLowerCase();
+
+	if (computerChoice === humanChoice) {
+		console.log("It's a tie.")
+		return;
+	}
+
+
+}
+
+function convertFromStringToInt(choice) {
+	switch (choice) {
+		case "rock":
+			return 0;
+
+		case "paper":
+			return 1;
+
+		case "scissors":
+			return 2;
+	}
+
+	return undefined;
+}
