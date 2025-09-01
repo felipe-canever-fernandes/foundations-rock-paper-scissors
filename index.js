@@ -1,4 +1,4 @@
-let playerScore = 0;
+let humanScore = 0;
 let computerScore = 0;
 
 console.log(`Human choice: ${getHumanChoice()}.`);
