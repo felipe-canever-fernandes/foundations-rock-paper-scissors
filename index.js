@@ -1,13 +1,22 @@
-let humanScore = 0;
-let computerScore = 0;
+playGame();
 
-const humanChoice = getHumanChoice();
-const computerChoice = getComputerChoice();
+function playGame() {
+	const roundCount = 5;
 
-playRound(humanChoice, computerChoice);
+	const score = {
+		human: 0,
+		computer: 0
+	};
 
-console.log(`Human score: ${humanScore}.`)
-console.log(`Computer score: ${computerScore}.`)
+	for (let i = 0; i < roundCount; ++i) {
+		const humanChoice = getHumanChoice();
+		const computerChoice = getComputerChoice();
+
+		playRound(humanChoice, computerChoice, score);
+	}
+
+	logWinner(score);
+}
 
 function getHumanChoice() {
 	const choice = prompt("Rock, paper, or scissors?");
@@ -30,52 +39,66 @@ function getComputerChoice() {
 	return "scissors";
 }
 
-function playRound(humanChoice, computerChoice) {
+function playRound(humanChoice, computerChoice, score) {
 	if (humanChoice === "rock") {
 		if (computerChoice === "rock") {
 			logDraw();
 		} else if (computerChoice === "scissors") {
-			logWinner("you", "rock", "scissors");
-			++humanScore;
+			logRoundWinner("you", "rock", "scissors");
+			++score.human;
 		} else {
-			logWinner("the computer", "paper", "rock");
-			++computerScore;
+			logRoundWinner("the computer", "paper", "rock");
+			++score.computer;
 		}
 	} else if (humanChoice === "scissors") {
 		if (computerChoice === "rock") {
-			logWinner("the computer", "rock", "scissors");
-			++computerScore;
+			logRoundWinner("the computer", "rock", "scissors");
+			++score.computer;
 		} else if (computerChoice === "scissors") {
 			logDraw();
 		} else {
-			logWinner("you", "scissors", "paper");
-			++humanScore;
+			logRoundWinner("you", "scissors", "paper");
+			++score.human;
 		}
 	} else {
 		if (computerChoice === "rock") {
-			logWinner("you", "paper", "rock");
-			++humanScore;
+			logRoundWinner("you", "paper", "rock");
+			++score.human;
 		} else if (computerChoice === "scissors") {
-			logWinner("the computer", "scissors", "paper");
-			++computerScore;
+			logRoundWinner("the computer", "scissors", "paper");
+			++score.computer;
 		} else {
 			logDraw();
 		}
 	}
 }
 
-function logDraw() {
-	console.log("It's a draw.");
-}
-
-function logWinner(winnerName, winnerHand, loserHand) {
+function logRoundWinner(winnerName, winnerHand, loserHand) {
 	const capitalizedWinnerName = capitalize(winnerName);
 	const capitalizedWinnerHand = capitalize(winnerHand);
 
 	console.log(
-		`${capitalizedWinnerName} won!` +
+		`${capitalizedWinnerName} won the round!` +
 			` ${capitalizedWinnerHand} beats ${loserHand}.`
 	);
+}
+
+function logWinner(score) {
+	console.log(`Your score: ${score.human}.`);
+	console.log(`Computer score: ${score.computer}.`);
+
+	if (score.human === score.computer) {
+		logDraw();
+		return;
+	}
+
+	const winner = score.human > score.computer ? "you" : "the computer";
+	const capitalizedWinner = capitalize(winner);
+	console.log(`${capitalizedWinner} won!`);
+}
+
+function logDraw() {
+	console.log("It's a draw.");
 }
 
 function capitalize(string) {
