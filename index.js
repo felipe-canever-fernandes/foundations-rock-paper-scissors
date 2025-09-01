@@ -1,4 +1,5 @@
 console.log(`Computer choice: ${getComputerChoice()}.`);
+console.log(`Human choice: ${getHumanChoice()}.`);
 
 function getComputerChoice() {
     const choiceCount = 3;
@@ -13,4 +14,9 @@ function getComputerChoice() {
     }
 
     return "scissors";
+}
+
+function getHumanChoice() {
+    const choice = prompt("Rock, paper, or scissors?");
+    return choice;
 }
