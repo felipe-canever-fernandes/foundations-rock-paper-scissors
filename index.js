@@ -1,3 +1,6 @@
+let computerScore = 0;
+let playerScore = 0;
+
 console.log(`Computer choice: ${getComputerChoice()}.`);
 console.log(`Human choice: ${getHumanChoice()}.`);
 
