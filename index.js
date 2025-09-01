@@ -1,8 +1,14 @@
-let computerScore = 0;
 let playerScore = 0;
+let computerScore = 0;
 
-console.log(`Computer choice: ${getComputerChoice()}.`);
 console.log(`Human choice: ${getHumanChoice()}.`);
+console.log(`Computer choice: ${getComputerChoice()}.`);
+
+function getHumanChoice() {
+    const choice = prompt("Rock, paper, or scissors?");
+    const lowercaseChoice = choice.toLowerCase();
+    return lowercaseChoice;
+}
 
 function getComputerChoice() {
     const choiceCount = 3;
@@ -17,10 +23,4 @@ function getComputerChoice() {
     }
 
     return "scissors";
-}
-
-function getHumanChoice() {
-    const choice = prompt("Rock, paper, or scissors?");
-    const lowercaseChoice = choice.toLowerCase();
-    return lowercaseChoice;
 }
