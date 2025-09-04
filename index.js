@@ -1,3 +1,6 @@
+const humanScoreElement = document.querySelector("#human-score");
+const computerScoreElement = document.querySelector("#computer-score");
+
 const choicesDiv = document.querySelector("#choices");
 choicesDiv.addEventListener("click", createOnChoiceButtonClicked());
 
@@ -6,11 +9,13 @@ function createOnChoiceButtonClicked() {
 		human: 0,
 		computer: 0
 	};
+	updateScoreboard(score);
 
 	return event => {
 		const humanChoice = event.target.getAttribute("data-choice");
 		const computerChoice = getComputerChoice();
 		playRound(humanChoice, computerChoice, score);
+		updateScoreboard(score);
 	}
 }
 
@@ -71,6 +76,11 @@ function logRoundWinner(winnerName, winnerHand, loserHand) {
 		`${capitalizedWinnerName} won the round!` +
 			` ${capitalizedWinnerHand} beats ${loserHand}.`
 	);
+}
+
+function updateScoreboard(score) {
+	humanScoreElement.textContent = score.human;
+	computerScoreElement.textContent = score.computer;
 }
 
 function logWinner(score) {
