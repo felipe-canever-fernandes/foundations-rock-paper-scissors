@@ -4,7 +4,11 @@ const computerScoreElement = document.querySelector("#computer-score");
 const choicesDiv = document.querySelector("#choices");
 choicesDiv.addEventListener("click", createOnChoiceButtonClicked());
 
+const messageParagraph = document.querySelector("#message");
+
 function createOnChoiceButtonClicked() {
+	const WIN_SCORE = 5;
+
 	const score = {
 		human: 0,
 		computer: 0
@@ -15,7 +19,9 @@ function createOnChoiceButtonClicked() {
 		const humanChoice = event.target.getAttribute("data-choice");
 		const computerChoice = getComputerChoice();
 		playRound(humanChoice, computerChoice, score);
+		
 		updateScoreboard(score);
+		updateResult(WIN_SCORE, score);
 	}
 }
 
@@ -109,4 +115,21 @@ function capitalize(string) {
 
 	const capitalized = firstCharacterCapitalized + rest;
 	return capitalized;
+}
+
+function updateResult(winScore, score) {
+	let winner = "";
+	if (score.human === winScore) {
+		winner = "you";
+	} else if (score.computer === winScore) {
+		winner = "the computer";
+	} else {
+		return;
+	}
+
+	const capitalizedWinner = capitalize(winner);
+	messageParagraph.textContent = `${capitalizedWinner} won!`;
+
+	score.human = 0;
+	score.computer = 0;
 }
