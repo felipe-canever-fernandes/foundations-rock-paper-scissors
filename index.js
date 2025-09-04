@@ -22,7 +22,7 @@ function createOnChoiceButtonClicked() {
 		playRound(humanChoice, computerChoice, score);
 		
 		updateScoreboard(score);
-		displayResult(WIN_SCORE, score);
+		displayFinalResult(WIN_SCORE, score);
 	}
 }
 
@@ -94,7 +94,7 @@ function displayDraw() {
 	roundResultElement.textContent = "It's a draw.";
 }
 
-function displayResult(winScore, score) {
+function displayFinalResult(winScore, score) {
 	let winner = "";
 	if (score.human === winScore) {
 		winner = "you";
