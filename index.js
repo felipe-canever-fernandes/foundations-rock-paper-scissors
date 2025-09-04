@@ -4,7 +4,8 @@ const computerScoreElement = document.querySelector("#computer-score");
 const choicesDiv = document.querySelector("#choices");
 choicesDiv.addEventListener("click", createOnChoiceButtonClicked());
 
-const messageParagraph = document.querySelector("#message");
+const roundResultElement = document.querySelector("#round-result");
+const winnerElement = document.querySelector("#winner");
 
 function createOnChoiceButtonClicked() {
 	const WIN_SCORE = 5;
@@ -21,7 +22,7 @@ function createOnChoiceButtonClicked() {
 		playRound(humanChoice, computerChoice, score);
 		
 		updateScoreboard(score);
-		updateResult(WIN_SCORE, score);
+		displayResult(WIN_SCORE, score);
 	}
 }
 
@@ -40,84 +41,60 @@ function getComputerChoice() {
 	return "scissors";
 }
 
-function playRound(humanChoice, computerChoice, score) {
-	if (humanChoice === "rock") {
-		if (computerChoice === "rock") {
-			logDraw();
-		} else if (computerChoice === "scissors") {
-			logRoundWinner("you", "rock", "scissors");
-			++score.human;
-		} else {
-			logRoundWinner("the computer", "paper", "rock");
-			++score.computer;
-		}
-	} else if (humanChoice === "scissors") {
-		if (computerChoice === "rock") {
-			logRoundWinner("the computer", "rock", "scissors");
-			++score.computer;
-		} else if (computerChoice === "scissors") {
-			logDraw();
-		} else {
-			logRoundWinner("you", "scissors", "paper");
-			++score.human;
-		}
-	} else {
-		if (computerChoice === "rock") {
-			logRoundWinner("you", "paper", "rock");
-			++score.human;
-		} else if (computerChoice === "scissors") {
-			logRoundWinner("the computer", "scissors", "paper");
-			++score.computer;
-		} else {
-			logDraw();
-		}
-	}
-}
-
-function logRoundWinner(winnerName, winnerHand, loserHand) {
-	const capitalizedWinnerName = capitalize(winnerName);
-	const capitalizedWinnerHand = capitalize(winnerHand);
-
-	console.log(
-		`${capitalizedWinnerName} won the round!` +
-			` ${capitalizedWinnerHand} beats ${loserHand}.`
-	);
-}
-
 function updateScoreboard(score) {
 	humanScoreElement.textContent = score.human;
 	computerScoreElement.textContent = score.computer;
 }
 
-function logWinner(score) {
-	console.log(`Your score: ${score.human}.`);
-	console.log(`Computer score: ${score.computer}.`);
-
-	if (score.human === score.computer) {
-		logDraw();
-		return;
+function playRound(humanChoice, computerChoice, score) {
+	if (humanChoice === "rock") {
+		if (computerChoice === "rock") {
+			displayDraw();
+		} else if (computerChoice === "scissors") {
+			displayRoundWinner("you", "rock", "scissors");
+			++score.human;
+		} else {
+			displayRoundWinner("the computer", "paper", "rock");
+			++score.computer;
+		}
+	} else if (humanChoice === "scissors") {
+		if (computerChoice === "rock") {
+			displayRoundWinner("the computer", "rock", "scissors");
+			++score.computer;
+		} else if (computerChoice === "scissors") {
+			displayDraw();
+		} else {
+			displayRoundWinner("you", "scissors", "paper");
+			++score.human;
+		}
+	} else {
+		if (computerChoice === "rock") {
+			displayRoundWinner("you", "paper", "rock");
+			++score.human;
+		} else if (computerChoice === "scissors") {
+			displayRoundWinner("the computer", "scissors", "paper");
+			++score.computer;
+		} else {
+			displayDraw();
+		}
 	}
-
-	const winner = score.human > score.computer ? "you" : "the computer";
-	const capitalizedWinner = capitalize(winner);
-	console.log(`${capitalizedWinner} won!`);
 }
 
-function logDraw() {
-	console.log("It's a draw.");
+function displayRoundWinner(winnerName, winnerHand, loserHand) {
+	const capitalizedWinnerName = capitalize(winnerName);
+	const capitalizedWinnerHand = capitalize(winnerHand);
+
+	roundResultElement.innerHTML =
+		`<strong>${capitalizedWinnerName}</strong> won the round!` +
+			` ${capitalizedWinnerHand} beats ${loserHand}.`
+	;
 }
 
-function capitalize(string) {
-	const firstCharacter = string[0];
-	const firstCharacterCapitalized = firstCharacter.toUpperCase();
-
-	const rest = string.slice(1);
-
-	const capitalized = firstCharacterCapitalized + rest;
-	return capitalized;
+function displayDraw() {
+	roundResultElement.textContent = "It's a draw.";
 }
 
-function updateResult(winScore, score) {
+function displayResult(winScore, score) {
 	let winner = "";
 	if (score.human === winScore) {
 		winner = "you";
@@ -128,8 +105,18 @@ function updateResult(winScore, score) {
 	}
 
 	const capitalizedWinner = capitalize(winner);
-	messageParagraph.textContent = `${capitalizedWinner} won!`;
+	winnerElement.textContent = `${capitalizedWinner} won!`;
 
 	score.human = 0;
 	score.computer = 0;
+}
+
+function capitalize(string) {
+	const firstCharacter = string[0];
+	const firstCharacterCapitalized = firstCharacter.toUpperCase();
+
+	const rest = string.slice(1);
+
+	const capitalized = firstCharacterCapitalized + rest;
+	return capitalized;
 }
