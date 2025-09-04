@@ -1,27 +1,17 @@
-playGame();
+const choicesDiv = document.querySelector("#choices");
+choicesDiv.addEventListener("click", createOnChoiceButtonClicked());
 
-function playGame() {
-	const roundCount = 5;
-
+function createOnChoiceButtonClicked() {
 	const score = {
 		human: 0,
 		computer: 0
 	};
 
-	for (let i = 0; i < roundCount; ++i) {
-		const humanChoice = getHumanChoice();
+	return event => {
+		const humanChoice = event.target.getAttribute("data-choice");
 		const computerChoice = getComputerChoice();
-
 		playRound(humanChoice, computerChoice, score);
 	}
-
-	logWinner(score);
-}
-
-function getHumanChoice() {
-	const choice = prompt("Rock, paper, or scissors?");
-	const lowercaseChoice = choice.toLowerCase();
-	return lowercaseChoice;
 }
 
 function getComputerChoice() {
