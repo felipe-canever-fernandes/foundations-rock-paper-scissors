@@ -30,7 +30,7 @@ function createOnChoiceButtonClicked() {
 		human: 0,
 		computer: 0
 	};
-	updateScoreboard(score);
+	updateScoreboard(score, WIN_SCORE);
 
 	return event => {
 		const humanChoice = event.target.getAttribute("data-choice");
@@ -41,7 +41,7 @@ function createOnChoiceButtonClicked() {
 		const result = playRound(humanChoice, computerChoice);
 
 		updateScore(result, score);
-		updateScoreboard(score);
+		updateScoreboard(score, WIN_SCORE);
 		displayRoundResult(humanChoice, computerChoice, result);
 
 		const finalResult = getFinalResult(WIN_SCORE, score);
@@ -54,9 +54,9 @@ function createOnChoiceButtonClicked() {
 	}
 }
 
-function updateScoreboard(score) {
-	humanScoreElement.textContent = score.human;
-	computerScoreElement.textContent = score.computer;
+function updateScoreboard(score, winScore) {
+	humanScoreElement.textContent = `${score.human}/${winScore}`;
+	computerScoreElement.textContent = `${score.computer}/${winScore}`;
 }
 
 function getComputerChoice() {
