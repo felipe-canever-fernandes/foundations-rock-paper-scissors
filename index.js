@@ -11,9 +11,16 @@ const ROCK = "rock";
 const PAPER = "paper";
 const SCISSORS = "scissors";
 
-const RESULT_DRAW = 0;
-const RESULT_HUMAN_WIN = 1;
-const RESULT_COMPUTER_WIN = 2;
+const ROUND_RESULT_DRAW = 0;
+const ROUND_RESULT_HUMAN_WIN = 1;
+const ROUND_RESULT_COMPUTER_WIN = 2;
+
+const FINAL_RESULT_NO_WINNER = 0;
+const FINAL_RESULT_HUMAN_WIN = 1;
+const FINAL_RESULT_COMPUTER_WIN = 2;
+
+const PLAYER_HUMAN_NAME = "you";
+const PLAYER_COMPUTER_NAME = "the computer";
 
 function createOnChoiceButtonClicked() {
 	const WIN_SCORE = 5;
@@ -33,7 +40,13 @@ function createOnChoiceButtonClicked() {
 		updateScoreboard(score);
 		displayRoundResult(humanChoice, computerChoice, result);
 
-		displayFinalResult(WIN_SCORE, score);
+		const finalResult = getFinalResult(WIN_SCORE, score);
+		if (finalResult !== FINAL_RESULT_NO_WINNER) {
+			score.human = 0;
+			score.computer = 0;
+		}
+
+		displayFinalResult(finalResult);
 	}
 }
 
@@ -60,38 +73,38 @@ function getComputerChoice() {
 function playRound(humanChoice, computerChoice) {
 	if (humanChoice === ROCK) {
 		if (computerChoice === ROCK) {
-			return RESULT_DRAW;
+			return ROUND_RESULT_DRAW;
 		} else if (computerChoice === SCISSORS) {
-			return RESULT_HUMAN_WIN;
+			return ROUND_RESULT_HUMAN_WIN;
 		} else {
-			return RESULT_COMPUTER_WIN;
+			return ROUND_RESULT_COMPUTER_WIN;
 		}
 	} else if (humanChoice === SCISSORS) {
 		if (computerChoice === ROCK) {
-			return RESULT_COMPUTER_WIN;
+			return ROUND_RESULT_COMPUTER_WIN;
 		} else if (computerChoice === SCISSORS) {
-			return RESULT_DRAW;
+			return ROUND_RESULT_DRAW;
 		} else {
-			return RESULT_HUMAN_WIN;
+			return ROUND_RESULT_HUMAN_WIN;
 		}
 	} else {
 		if (computerChoice === ROCK) {
-			return RESULT_HUMAN_WIN;
+			return ROUND_RESULT_HUMAN_WIN;
 		} else if (computerChoice === SCISSORS) {
-			return RESULT_COMPUTER_WIN;
+			return ROUND_RESULT_COMPUTER_WIN;
 		} else {
-			return RESULT_DRAW;
+			return ROUND_RESULT_DRAW;
 		}
 	}
 }
 
 function updateScore(result, score) {
 	switch (result) {
-		case RESULT_HUMAN_WIN:
+		case ROUND_RESULT_HUMAN_WIN:
 			++score.human;
 			break;
 		
-		case RESULT_COMPUTER_WIN:
+		case ROUND_RESULT_COMPUTER_WIN:
 			++score.computer;
 			break;
 	
@@ -101,14 +114,14 @@ function updateScore(result, score) {
 }
 
 function displayRoundResult(humanChoice, computerChoice, result) {
-	if (result === RESULT_DRAW) {
+	if (result === ROUND_RESULT_DRAW) {
 		roundResultElement.innerHTML = "It's a draw.";
 		return;
 	}
 
-	const humanWon = result === RESULT_HUMAN_WIN;
+	const humanWon = result === ROUND_RESULT_HUMAN_WIN;
 
-	const winnerName = humanWon ? "you" : "the computer";
+	const winnerName = humanWon ? PLAYER_HUMAN_NAME : PLAYER_COMPUTER_NAME;
 
 	let winnerChoice = humanChoice;
 	let loserChoice = computerChoice;
@@ -122,20 +135,30 @@ function displayRoundResult(humanChoice, computerChoice, result) {
 	;
 }
 
-function displayFinalResult(winScore, score) {
-	let winner = "";
+function getFinalResult(winScore, score) {
 	if (score.human === winScore) {
-		winner = "you";
-	} else if (score.computer === winScore) {
-		winner = "the computer";
-	} else {
+		return FINAL_RESULT_HUMAN_WIN;
+	}
+
+	if (score.computer === winScore) {
+		return FINAL_RESULT_COMPUTER_WIN;
+	}
+
+	return FINAL_RESULT_NO_WINNER;
+}
+
+function displayFinalResult(finalResult) {
+	if (finalResult === FINAL_RESULT_NO_WINNER) {
 		return;
 	}
 
-	finalResultElement.textContent = `${capitalize(capitalizedWinner)} won!`;
+	const winnerName = finalResult ===
+		FINAL_RESULT_HUMAN_WIN
+		? PLAYER_HUMAN_NAME
+		: PLAYER_COMPUTER_NAME
+	;
 
-	score.human = 0;
-	score.computer = 0;
+	finalResultElement.textContent = `${capitalize(winnerName)} won!`;
 }
 
 function capitalize(string) {
