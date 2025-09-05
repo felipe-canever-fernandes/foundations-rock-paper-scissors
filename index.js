@@ -5,7 +5,7 @@ const choicesDiv = document.querySelector("#choices");
 choicesDiv.addEventListener("click", createOnChoiceButtonClicked());
 
 const roundResultElement = document.querySelector("#round-result");
-const winnerElement = document.querySelector("#winner");
+const finalResultElement = document.querySelector("#final-result");
 
 const ROCK = "rock";
 const PAPER = "paper";
@@ -132,8 +132,7 @@ function displayFinalResult(winScore, score) {
 		return;
 	}
 
-	const capitalizedWinner = capitalize(winner);
-	winnerElement.textContent = `${capitalizedWinner} won!`;
+	finalResultElement.textContent = `${capitalize(capitalizedWinner)} won!`;
 
 	score.human = 0;
 	score.computer = 0;
