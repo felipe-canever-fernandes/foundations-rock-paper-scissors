@@ -7,6 +7,14 @@ choicesDiv.addEventListener("click", createOnChoiceButtonClicked());
 const roundResultElement = document.querySelector("#round-result");
 const winnerElement = document.querySelector("#winner");
 
+const ROCK = "rock";
+const PAPER = "paper";
+const SCISSORS = "scissors";
+
+const RESULT_DRAW = 0;
+const RESULT_HUMAN_WIN = 1;
+const RESULT_COMPUTER_WIN = 2;
+
 function createOnChoiceButtonClicked() {
 	const WIN_SCORE = 5;
 
@@ -19,26 +27,14 @@ function createOnChoiceButtonClicked() {
 	return event => {
 		const humanChoice = event.target.getAttribute("data-choice");
 		const computerChoice = getComputerChoice();
-		playRound(humanChoice, computerChoice, score);
-		
+		const result = playRound(humanChoice, computerChoice);
+
+		updateScore(result, score);
 		updateScoreboard(score);
+		displayRoundResult(humanChoice, computerChoice, result);
+
 		displayFinalResult(WIN_SCORE, score);
 	}
-}
-
-function getComputerChoice() {
-	const choiceCount = 3;
-	const choiceValue = Math.random() * choiceCount;
-	
-	if (choiceValue <= 1) {
-		return "rock";
-	}
-
-	if (choiceValue <= 2) {
-		return "paper";
-	}
-
-	return "scissors";
 }
 
 function updateScoreboard(score) {
@@ -46,52 +42,84 @@ function updateScoreboard(score) {
 	computerScoreElement.textContent = score.computer;
 }
 
-function playRound(humanChoice, computerChoice, score) {
-	if (humanChoice === "rock") {
-		if (computerChoice === "rock") {
-			displayDraw();
-		} else if (computerChoice === "scissors") {
-			displayRoundWinner("you", "rock", "scissors");
-			++score.human;
+function getComputerChoice() {
+	const choiceCount = 3;
+	const choiceValue = Math.random() * choiceCount;
+	
+	if (choiceValue <= 1) {
+		return ROCK;
+	}
+
+	if (choiceValue <= 2) {
+		return PAPER;
+	}
+
+	return SCISSORS;
+}
+
+function playRound(humanChoice, computerChoice) {
+	if (humanChoice === ROCK) {
+		if (computerChoice === ROCK) {
+			return RESULT_DRAW;
+		} else if (computerChoice === SCISSORS) {
+			return RESULT_HUMAN_WIN;
 		} else {
-			displayRoundWinner("the computer", "paper", "rock");
-			++score.computer;
+			return RESULT_COMPUTER_WIN;
 		}
-	} else if (humanChoice === "scissors") {
-		if (computerChoice === "rock") {
-			displayRoundWinner("the computer", "rock", "scissors");
-			++score.computer;
-		} else if (computerChoice === "scissors") {
-			displayDraw();
+	} else if (humanChoice === SCISSORS) {
+		if (computerChoice === ROCK) {
+			return RESULT_COMPUTER_WIN;
+		} else if (computerChoice === SCISSORS) {
+			return RESULT_DRAW;
 		} else {
-			displayRoundWinner("you", "scissors", "paper");
-			++score.human;
+			return RESULT_HUMAN_WIN;
 		}
 	} else {
-		if (computerChoice === "rock") {
-			displayRoundWinner("you", "paper", "rock");
-			++score.human;
-		} else if (computerChoice === "scissors") {
-			displayRoundWinner("the computer", "scissors", "paper");
-			++score.computer;
+		if (computerChoice === ROCK) {
+			return RESULT_HUMAN_WIN;
+		} else if (computerChoice === SCISSORS) {
+			return RESULT_COMPUTER_WIN;
 		} else {
-			displayDraw();
+			return RESULT_DRAW;
 		}
 	}
 }
 
-function displayRoundWinner(winnerName, winnerHand, loserHand) {
-	const capitalizedWinnerName = capitalize(winnerName);
-	const capitalizedWinnerHand = capitalize(winnerHand);
-
-	roundResultElement.innerHTML =
-		`<strong>${capitalizedWinnerName}</strong> won the round!` +
-			` ${capitalizedWinnerHand} beats ${loserHand}.`
-	;
+function updateScore(result, score) {
+	switch (result) {
+		case RESULT_HUMAN_WIN:
+			++score.human;
+			break;
+		
+		case RESULT_COMPUTER_WIN:
+			++score.computer;
+			break;
+	
+		default:
+			break;
+	}
 }
 
-function displayDraw() {
-	roundResultElement.textContent = "It's a draw.";
+function displayRoundResult(humanChoice, computerChoice, result) {
+	if (result === RESULT_DRAW) {
+		roundResultElement.innerHTML = "It's a draw.";
+		return;
+	}
+
+	const humanWon = result === RESULT_HUMAN_WIN;
+
+	const winnerName = humanWon ? "you" : "the computer";
+
+	let winnerChoice = humanChoice;
+	let loserChoice = computerChoice;
+	if (!humanWon) {
+		[winnerChoice, loserChoice] = [loserChoice, winnerChoice];
+	}
+
+	roundResultElement.innerHTML =
+		`<strong>${capitalize(winnerName)}</strong> won the round!` +
+			` ${capitalize(winnerChoice)} beats ${loserChoice}.`
+	;
 }
 
 function displayFinalResult(winScore, score) {
