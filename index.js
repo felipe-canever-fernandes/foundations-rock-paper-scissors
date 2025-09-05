@@ -4,6 +4,7 @@ const computerScoreElement = document.querySelector("#computer-score");
 const choicesDiv = document.querySelector("#choices");
 choicesDiv.addEventListener("click", createOnChoiceButtonClicked());
 
+const computerChoiceElement = document.querySelector("#computer-choice");
 const roundResultElement = document.querySelector("#round-result");
 const finalResultElement = document.querySelector("#final-result");
 
@@ -33,7 +34,10 @@ function createOnChoiceButtonClicked() {
 
 	return event => {
 		const humanChoice = event.target.getAttribute("data-choice");
+
 		const computerChoice = getComputerChoice();
+		displayComputerChoice(computerChoice);
+
 		const result = playRound(humanChoice, computerChoice);
 
 		updateScore(result, score);
@@ -96,6 +100,12 @@ function playRound(humanChoice, computerChoice) {
 			return ROUND_RESULT_DRAW;
 		}
 	}
+}
+
+function displayComputerChoice(choice) {
+	computerChoiceElement.innerHTML =
+		`${capitalize(PLAYER_COMPUTER_NAME)} played <strong>${choice}</strong>.`
+	;
 }
 
 function updateScore(result, score) {
